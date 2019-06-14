@@ -2,6 +2,10 @@ from google.transit import gtfs_realtime_pb2
 import urllib.request
 import os
 from datetime import datetime
+import logging
+
+log = logging.getLogger()
+logging.basicConfig(level=logging.INFO)
 
 
 def get_stop_times():
@@ -12,8 +16,8 @@ def get_stop_times():
     bedford = '115N'
 
     feed = gtfs_realtime_pb2.FeedMessage()
-    # url = mta_url + mta_key + '&feed_id=' + mta_feedid
-    url = mta_url + mta_key + '&feed_id=' + '1'
+    url = mta_url + mta_key + '&feed_id=' + mta_feedid
+    # url = mta_url + mta_key + '&feed_id=' + '1'
     response = urllib.request.urlopen(url)
     feed.ParseFromString(response.read())
 
@@ -28,17 +32,17 @@ def get_stop_times():
                         if len(stop_times) >= 5:
                             return stop_times
                     except ValueError as err:
-                        print('invalid timestamp', stop_time_update.arrival.time, err)
+                        log.info('invalid timestamp: %s. err: %s'.format(str(stop_time_update.arrival.time), err))
     return stop_times
 
 
 def get_next_trains():
-    print('starting get next trains...')
+    log.info('starting get next trains...')
     times = get_stop_times()
-    print('stop times:', times)
+    log.info('stop times: %s', times)
     curr_time = datetime.now()
     gaps = [round((t - curr_time).seconds / 60) for t in times]  # list of gaps in seconds...
-    print('gaps:', gaps)
+    log.info('gaps: %s', gaps)
     return gaps
 
 
