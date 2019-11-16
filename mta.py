@@ -9,11 +9,12 @@ logging.basicConfig(level=logging.INFO)
 
 
 def get_stop_times():
+    log.info('getting stop times...')
     mta_url = os.getenv('MTAURL')
     mta_key = os.getenv('MTAKEY')
     mta_feedid = os.getenv('MTAFEEDID')
-    # bedford = 'L08N'
-    bedford = '115N'
+    bedford = 'L08N'
+    # bedford = '115N'
 
     feed = gtfs_realtime_pb2.FeedMessage()
     url = mta_url + mta_key + '&feed_id=' + mta_feedid
@@ -30,6 +31,7 @@ def get_stop_times():
                         dt = datetime.fromtimestamp(stop_time_update.arrival.time)
                         stop_times.append(dt)
                         if len(stop_times) >= 5:
+                            log.info('stop times found.')
                             return stop_times
                     except ValueError as err:
                         log.info('invalid timestamp: %s. err: %s'.format(str(stop_time_update.arrival.time), err))
