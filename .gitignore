@@ -1,5 +1,6 @@
+.serverless
 .idea
-run.sh
+lambda-package.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -48,5 +48,5 @@ def get_next_trains():
     return gaps
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     print(get_next_trains())
