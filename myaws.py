@@ -1,8 +1,8 @@
 from ask_sdk_core.skill_builder import SkillBuilder
-from ask_sdk_core.dispatch_components import AbstractRequestHandler
+from ask_sdk_core.dispatch_components import AbstractRequestHandler, AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
-from mta import get_stop_times
+from mta import get_next_trains
 import logging
 
 log = logging.getLogger()
@@ -21,13 +21,13 @@ logging.basicConfig(level=logging.INFO)
 def getwords(traintimes):
     if len(traintimes) == 0:
         return 'No L trains found.'
-    elif len(traintimes == 1):
+    elif len(traintimes) == 1:
         return "The next L train leaves in {0} minutes.".format(traintimes[0])
     else:
         words = 'The next L trains leave in '
-        for ct in range(0, len(traintimes - 2)): # treat the last time differently.
+        for ct in range(0, len(traintimes) - 2): # treat the last time differently.
             words += "{0}, ".format(traintimes[ct])
-        words += " and {0} minutes.", traintimes[len(traintimes - 1)]
+        words += " and {0} minutes.".format(traintimes[len(traintimes) - 1])
     return words
 
 
@@ -43,7 +43,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
     # handle the actual launch request by getting the train times and converting to speech
     def handle(self, handler_input):
         log.info('handling launch request...')
-        traintimes = get_stop_times()
+        traintimes = get_next_trains()
         speech_text = getwords(traintimes)
         log.info('{0} train times found.'.format(len(traintimes)))
 

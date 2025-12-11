@@ -43,21 +43,18 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  environment:
+    MTAURL: ${env:MTAURL, 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-l'}
 
 # you can add packaging information here
-#package:
-#  include:
-#    - include-me.py
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.py
-#    - exclude-me-dir/**
+package:
+  artifact: lambda-package.zip
 
 functions:
-  hello:
-    handler: handler.hello
+  alexaLTrain:
+    handler: myaws.handler
+    events:
+      - alexaSkill: ${env:ALEXA_SKILL_ID}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

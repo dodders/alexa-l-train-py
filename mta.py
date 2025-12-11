@@ -10,16 +10,15 @@ logging.basicConfig(level=logging.INFO)
 
 def get_stop_times():
     log.info('getting stop times...')
-    mta_url = os.getenv('MTAURL')
-    mta_key = os.getenv('MTAKEY')
-    mta_feedid = os.getenv('MTAFEEDID')
+    # MTA API no longer requires authentication as of 2024
+    mta_url = os.getenv('MTAURL', 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-l')
     bedford = 'L08N'
     # bedford = '115N'
 
     feed = gtfs_realtime_pb2.FeedMessage()
-    url = mta_url + mta_key + '&feed_id=' + mta_feedid
-    # url = mta_url + mta_key + '&feed_id=' + '1'
-    response = urllib.request.urlopen(url)
+
+    # No API key required - MTA APIs are now open access
+    response = urllib.request.urlopen(mta_url)
     feed.ParseFromString(response.read())
 
     stop_times = []

@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
-export MTAURL=http://datamine.mta.info/mta_esi.php?key=
-export MTAKEY=9a707b925e75f2830938dba89a0c62f2
-export MTAFEEDID=2
+# MTA API no longer requires authentication as of 2024
+# The API is free and open to use
+export MTAURL=https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-l
 
-pipenv run python3 mta.py
+# Use pipenv from user's Python bin if available, fallback to system pipenv
+PIPENV_CMD=${HOME}/Library/Python/3.9/bin/pipenv
+if ! command -v pipenv &> /dev/null && [ -f "$PIPENV_CMD" ]; then
+    $PIPENV_CMD run python3 mta.py
+else
+    pipenv run python3 mta.py
+fi
