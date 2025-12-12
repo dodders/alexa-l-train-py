@@ -22,7 +22,7 @@ service: alexa-l-train-py
 
 provider:
   name: aws
-  runtime: python3.6
+  runtime: python3.12
   region: us-east-1
   profile: serverless
 

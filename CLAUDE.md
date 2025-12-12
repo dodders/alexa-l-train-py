@@ -14,7 +14,7 @@ This is a Python AWS Lambda application that implements an Alexa skill to retrie
 6. Alexa speaks the train times to the user
 
 ### Technology Stack
-- **Runtime**: Python 3.7 (Pipenv) / Python 3.6 (Lambda)
+- **Runtime**: Python 3.12 (Pipenv and Lambda)
 - **Cloud Platform**: AWS Lambda
 - **Voice Platform**: Amazon Alexa Skills Kit
 - **Data Source**: MTA GTFS-realtime API
@@ -22,6 +22,7 @@ This is a Python AWS Lambda application that implements an Alexa skill to retrie
 - **Dependencies**:
   - `ask-sdk`: Amazon Alexa Skills Kit SDK for Python
   - `gtfs-realtime-bindings`: Google Transit GTFS-realtime protocol buffers
+  - `urllib3`: 2.6.2+ (transitive dependency, security-patched version)
 
 ## Project Structure
 
@@ -94,10 +95,10 @@ Serverless Framework configuration for AWS deployment.
 **Configuration**:
 - Service name: `alexa-l-train-py`
 - Provider: AWS
-- Runtime: Python 3.6
+- Runtime: Python 3.12
 - Region: us-east-1
 - Profile: serverless
-- Function: `hello` with handler `handler.hello` (Note: This appears to be default boilerplate and may need updating to point to `myaws.handler`)
+- Function: `alexaLTrain` with handler `myaws.handler`
 
 ### Build and Deployment Files
 
@@ -108,7 +109,7 @@ Python dependency management using Pipenv.
 - `gtfs-realtime-bindings`: For parsing MTA GTFS-realtime protobuf data
 - `ask-sdk`: Amazon Alexa Skills Kit SDK
 
-**Python Version**: 3.7
+**Python Version**: 3.12
 
 #### `package.sh`
 Shell script to package Lambda function with dependencies.
@@ -246,5 +247,6 @@ When working with this codebase:
 4. Alexa skills have specific request/response formats that must be followed
 5. The Lambda function must be fast to avoid Alexa timeout
 6. Environment variables must be set in AWS Lambda configuration for production use
-7. The codebase uses both Python 3.6 (Lambda) and 3.7 (Pipenv) - be aware of compatibility
-8. **Deployment is now simpler** - only Alexa Skill ID is required, no MTA API key needed
+7. **Python Version**: The codebase now uses Python 3.12 for both local development and Lambda runtime
+8. **Security**: urllib3 has been upgraded to 2.6.2+ to address CVE-2025-50181, CVE-2025-66471, and other vulnerabilities
+9. **Deployment is now simpler** - only Alexa Skill ID is required, no MTA API key needed
